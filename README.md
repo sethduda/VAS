@@ -5,7 +5,7 @@
          alt="BIF Thread" />
   </a>
   <a href="https://raw.githubusercontent.com/TAWTonic/VAS/master/changelog.txt">
-    <img src="http://img.shields.io/badge/Version-2.8-blue.svg?style=flat"
+    <img src="http://img.shields.io/badge/Version-2.9-blue.svg?style=flat"
          alt="Changelog" />
   </a>
   <a href="http://www.armaholic.com/page.php?id=19134">
