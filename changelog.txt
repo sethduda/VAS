@@ -1,3 +1,6 @@
+v2.9:
+Added: VAS will now preload and cache each category filter which should speed up the UI rendering.
+
 v2.8:
 Fixed: Resolved the UI rendering issues.
 
