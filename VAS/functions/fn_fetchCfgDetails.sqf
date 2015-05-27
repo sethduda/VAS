@@ -85,26 +85,54 @@ switch (_cfg) do
 		if(isClass (_config >> "Armory")) then {_AGMItem = true;};
 		
 		//Compatible attachments
-		if(isClass (_config >> "WeaponSlotsInfo")) then
-		{
-			_acc_p = getArray(_config >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems");
-			_acc_o = getArray(_config >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems");
-			_acc_m = getArray(_config >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems");
-			if(isClass (_config >> "WeaponSlotsInfo" >> "UnderBarrelSlot")) then {
-				_acc_u = getArray(_config >> "WeaponSlotsInfo" >> "UnderBarrelSlot" >> "compatibleItems");
-			};
+		if(isClass (_config >> "WeaponSlotsInfo")) then {
 			
-			{	private "_thiscfgitem";
-				for "_i" from 0 to (count(_x) - 1) do {
-					_thiscfgitem = _x select _i;
-					if (isClass _thiscfgitem) then {
-						if !((configName _thiscfgitem) in _slotclasses) then {
-							_slotclasses set [count _slotclasses, configName _thiscfgitem];
-						};
+			/*
+				This part detects whether or not it is vanilla config structure or class structure.
+				
+				Pointers
+			*/
+			if(isArray (_config >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems")) then {
+				_acc_p = getArray(_config >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems");
+			} else {
+				if(isClass (_config >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems")) then {
+					{
+						if(getNumber _x > 0 && {!((configName _x) in _acc_p)}) then {_acc_p pushBack configName _x;};
+					} foreach configProperties [(_config >> "WeaponSlotsInfo" >> "PointerSlot" >> "compatibleItems"), "isNumber _x"];
+				};
+			};
+			//Optics
+			if(isArray (_config >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems")) then {
+				_acc_o = getArray(_config >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems");
+			} else {
+				if(isClass (_config >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems")) then {
+					{
+						if(getNumber _x > 0 && {!((configName _x) in _acc_o)}) then {_acc_o pushBack configName _x;};
+					} foreach configProperties [(_config >> "WeaponSlotsInfo" >> "CowsSlot" >> "compatibleItems"), "isNumber _x"];
+				};
+			};
+			//Muzzles
+			if(isArray (_config >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems")) then {
+				_acc_m = getArray(_config >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems");
+			} else {
+				if(isClass (_config >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems")) then {
+					{
+						if(getNumber _x > 0 && {!((configName _x) in _acc_m)}) then {_acc_m pushBack configName _x;};
+					} foreach configProperties [(_config >> "WeaponSlotsInfo" >> "MuzzleSlot" >> "compatibleItems"), "isNumber _x"];
+				};
+			};
+			//UnderBarrel / Bipods
+			if(isClass (_config >> "WeaponSlotsInfo" >> "UnderBarrelSlot")) then {
+				if(isArray (_config >> "WeaponSlotsInfo" >> "UnderBarrelSlot" >> "compatibleItems")) then {
+					_acc_u = getArray(_config >> "WeaponSlotsInfo" >> "UnderBarrelSlot" >> "compatibleItems");
+				} else {
+					if(isClass (_config >> "WeaponSlotsInfo" >> "UnderBarrelSlot" >> "compatibleItems")) then {
+						{
+							if(getNumber _x > 0 && {!((configName _x) in _acc_u)}) then {_acc_u pushBack configName _x;};
+						} foreach configProperties [(_config >> "WeaponSlotsInfo" >> "UnderBarrelSlot" >> "compatibleItems"), "isNumber _x"];
 					};
 				};
-			} forEach ([_config>>"WeaponSlotsInfo"] call bis_fnc_returnParents);
-
+			};
 		};
 		
 		if(isClass (_config >> "ItemInfo")) then {
@@ -134,11 +162,5 @@ switch (_cfg) do
 	};
 };
 
-if(!isNil "_slotclasses") then {
-	_slotclasses = _slotclasses - ["MuzzleSlot"];
-	_slotclasses = _slotclasses - ["CowsSlot"];
-	_slotclasses = _slotclasses - ["PointerSlot"];
-	_slotclasses = _slotclasses - ["UnderBarrelSlot"];
-};
 _ret = [_entity,_displayName,_picture,_scope,_type,_itemInfo,_cfg,_magazines,_muzzles,_desc,_acc_p,_acc_o,_acc_m,_base,_slotclasses,_AGMItem,_acc_u];
 _ret;

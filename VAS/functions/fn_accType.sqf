@@ -29,33 +29,14 @@ _weaponArray = [primaryWeapon player, secondaryWeapon player, handgunWeapon play
 		_weapon = _x;
 		_cfgInfo = [_weapon,"CfgWeapons"] call VAS_fnc_fetchCfgDetails;
 		_legacyItems = ((_cfgInfo select 10) + (_cfgInfo select 11) + (_cfgInfo select 12) + (_cfgInfo select 16));
-		_newItems = _cfgInfo select 14;
 		
 		//Check Legacy Items first
-		if(count _legacyItems > 0) then
-		{
-			for "_i" from 0 to (count _legacyItems)-1 do
-			{
+		if(count _legacyItems > 0) then {
+			for "_i" from 0 to (count _legacyItems)-1 do {
 				_legacyItems set[_i,toLower(_legacyItems select _i)];
 			};
 			
 			if((toLower _item) in _legacyItems) exitWith {_ret = switch(_weapon) do {case (primaryWeapon player): {1};case (secondaryWeapon player) : {2};case (handgunWeapon player): {3};default {0};};};
-		};
-		
-		//Check new compatibleItems class structure
-		if(count _newItems > 0) then
-		{
-			//This gets weird with foreach in foreach :\
-			{
-				if(_ret != 0) exitWith {};
-				_cfg = getNumber(configFile >> "CfgWeapons" >> _weapon >> "WeaponSlotsInfo" >> _x >> "compatibleItems" >> _item);
-				if(isNil "_cfg") then {_cfg = 0;};
-				if(_cfg == 1) exitWith
-				{
-					_ret = switch(_weapon) do {case (primaryWeapon player): {1};case (secondaryWeapon player) : {2};case (handgunWeapon player): {3};default {0};};
-				};
-			} foreach _newItems;
-			if(_ret != 0) exitWith {}; //Make sure we exit the loop
 		};
 	};
 } foreach _weaponArray;
