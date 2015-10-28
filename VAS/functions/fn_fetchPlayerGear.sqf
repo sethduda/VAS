@@ -5,100 +5,102 @@
 	@file_edit: 7/9/2013
 	@file_description: Retrieves players current gear and returns it.
 */
-private["_ret","_curWep"];
+private["_ret","_curWep","_unitToConfigure"];
 _ret = [];
 
+_unitToConfigure = [] call VAS_fnc_getUnitToConfigure;
+
 //Fetch Weapons
-if(primaryWeapon player != "") then {_ret set[count _ret,primaryWeapon player];};
-if(secondaryWeapon player != "") then {_ret set[count _ret,secondaryWeapon player];};
-if(handgunWeapon player != "") then {_ret set[count _ret,handgunWeapon player];};
+if(primaryWeapon _unitToConfigure != "") then {_ret set[count _ret,primaryWeapon _unitToConfigure];};
+if(secondaryWeapon _unitToConfigure != "") then {_ret set[count _ret,secondaryWeapon _unitToConfigure];};
+if(handgunWeapon _unitToConfigure != "") then {_ret set[count _ret,handgunWeapon _unitToConfigure];};
 
 //Fetch Current Magazines
-if(count (primaryWeaponMagazine player) > 0) then
+if(count (primaryWeaponMagazine _unitToConfigure) > 0) then
 {
 	{
 		_ret set[count _ret,_x];
-	} foreach (primaryWeaponMagazine player);
+	} foreach (primaryWeaponMagazine _unitToConfigure);
 };
 
-if(count (secondaryWeaponMagazine player) > 0) then
+if(count (secondaryWeaponMagazine _unitToConfigure) > 0) then
 {
 	{
 		_ret set[count _ret,_x];
-	} foreach (secondaryWeaponMagazine player);
+	} foreach (secondaryWeaponMagazine _unitToConfigure);
 };
 
-if(count (handgunMagazine player) > 0) then
+if(count (handgunMagazine _unitToConfigure) > 0) then
 {
 	{
 		_ret set[count _ret,_x];
-	} foreach (handgunMagazine player);
+	} foreach (handgunMagazine _unitToConfigure);
 };
 
 //Hard code for Laser Desigantor batteries
-_curWep = currentWeapon player;
+_curWep = currentWeapon _unitToConfigure;
 
-if("Laserdesignator" in assignedItems player) then
+if("Laserdesignator" in assignedItems _unitToConfigure) then
 {
-	player selectWeapon "Laserdesignator";
-	if(currentMagazine player != "") then {_ret set[count _ret,(currentMagazine player)];};
+	_unitToConfigure selectWeapon "Laserdesignator";
+	if(currentMagazine _unitToConfigure != "") then {_ret set[count _ret,(currentMagazine _unitToConfigure)];};
 };
 
-player selectWeapon _curWep;
+_unitToConfigure selectWeapon _curWep;
 
 //Fetch rest of misc information.
-if(uniform player != "") then 
+if(uniform _unitToConfigure != "") then 
 {
-	_ret set[count _ret, uniform player]; //Get uniform
-	{_ret set[count _ret,_x];} foreach (uniformItems player); //Get uniform items
+	_ret set[count _ret, uniform _unitToConfigure]; //Get uniform
+	{_ret set[count _ret,_x];} foreach (uniformItems _unitToConfigure); //Get uniform items
 };	
 
-if(vest player != "") then 
+if(vest _unitToConfigure != "") then 
 {
-	_ret set[count _ret, vest player]; //Get vest
-	{_ret set[count _ret,_x];} foreach (vestItems player); //Get vest items
+	_ret set[count _ret, vest _unitToConfigure]; //Get vest
+	{_ret set[count _ret,_x];} foreach (vestItems _unitToConfigure); //Get vest items
 };
 
-if(backpack player != "") then 
+if(backpack _unitToConfigure != "") then 
 {
-	_ret set[count _ret,backpack player]; //Get Backpack
-	{_ret set[count _ret,_x];} foreach (backpackItems player); //Get Backpack Items
+	_ret set[count _ret,backpack _unitToConfigure]; //Get Backpack
+	{_ret set[count _ret,_x];} foreach (backpackItems _unitToConfigure); //Get Backpack Items
 };
 
-if(count (assignedItems player) > 0) then 
+if(count (assignedItems _unitToConfigure) > 0) then 
 {
 	{
 		_ret set[count _ret,_x];
-	} foreach (assignedItems player);
+	} foreach (assignedItems _unitToConfigure);
 };
 
-if(headGear player != "") then
+if(headGear _unitToConfigure != "") then
 {
-	_ret set[count _ret,headGear player];
+	_ret set[count _ret,headGear _unitToConfigure];
 };
 
-if(goggles player != "") then
+if(goggles _unitToConfigure != "") then
 {
-	_ret set[count _ret, goggles player];
+	_ret set[count _ret, goggles _unitToConfigure];
 };
 
 //Fetch Primary weapon attachments
-if(primaryWeapon player != "") then
+if(primaryWeapon _unitToConfigure != "") then
 {
 	{
-		if(((primaryWeaponItems player) select _x) != "") then
+		if(((primaryWeaponItems _unitToConfigure) select _x) != "") then
 		{
-			_ret set[count _ret,((primaryWeaponItems player) select _x)];
+			_ret set[count _ret,((primaryWeaponItems _unitToConfigure) select _x)];
 		};
 	} foreach [0,1,2];
 };
 
-if(handgunWeapon player != "") then
+if(handgunWeapon _unitToConfigure != "") then
 {
 	{
-		if(((handgunItems player) select _x) != "") then
+		if(((handgunItems _unitToConfigure) select _x) != "") then
 		{
-			_ret set[count _ret,((handgunItems player) select _x)];
+			_ret set[count _ret,((handgunItems _unitToConfigure) select _x)];
 		};
 	} foreach [0,1,2];
 };

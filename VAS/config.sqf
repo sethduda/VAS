@@ -94,6 +94,8 @@ vas_r_magazines = [];
 vas_r_items = [];
 //Goggles to remove from VAS
 vas_r_glasses = [];
+//Enable player to configure group's units using VAS when < 25m from a VAS container
+vas_group_config = true;
 
 /*
 	BACK END VARIABLEs, DO NOT TOUCH OR I KILL YOU!

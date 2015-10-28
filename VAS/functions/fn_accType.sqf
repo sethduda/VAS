@@ -15,13 +15,15 @@
 	2: Secondary
 	3: Handgun
 */
-private["_item","_type","_tmp","_ret","_weaponArray"];
+private["_item","_type","_tmp","_ret","_weaponArray","_unitToConfigure"];
 _item = [_this,0,"",[""]] call BIS_fnc_param;
 _type = [_this,1,0,[0]] call BIS_fnc_param;
 if(_item == "" || _type == 0) exitWith {0};
 _ret = 0;
 
-_weaponArray = [primaryWeapon player, secondaryWeapon player, handgunWeapon player];
+_unitToConfigure = [] call VAS_fnc_getUnitToConfigure;
+
+_weaponArray = [primaryWeapon _unitToConfigure, secondaryWeapon _unitToConfigure, handgunWeapon _unitToConfigure];
 {
 	if(_ret != 0) exitWith {}; //Make sure we exit the loop since there was already a match.
 	if(_x != "") then
@@ -36,7 +38,7 @@ _weaponArray = [primaryWeapon player, secondaryWeapon player, handgunWeapon play
 				_legacyItems set[_i,toLower(_legacyItems select _i)];
 			};
 			
-			if((toLower _item) in _legacyItems) exitWith {_ret = switch(_weapon) do {case (primaryWeapon player): {1};case (secondaryWeapon player) : {2};case (handgunWeapon player): {3};default {0};};};
+			if((toLower _item) in _legacyItems) exitWith {_ret = switch(_weapon) do {case (primaryWeapon _unitToConfigure): {1};case (secondaryWeapon _unitToConfigure) : {2};case (handgunWeapon _unitToConfigure): {3};default {0};};};
 		};
 	};
 } foreach _weaponArray;

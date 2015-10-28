@@ -6,7 +6,7 @@
 	@file_edit: 9/24/2013
 	@file_description: Load saved gear in old VAS format.
 */
-private["_slot","_loadout","_primary","_launcher","_handgun","_magazines","_uniform","_vest","_backpack","_items","_primitems","_secitems","_handgunitems","_uitems","_vitems","_bitems","_handle"];
+private["_slot","_loadout","_primary","_launcher","_handgun","_magazines","_uniform","_vest","_backpack","_items","_primitems","_secitems","_handgunitems","_uitems","_vitems","_bitems","_handle","_unitToConfigure"];
 if(!isNil {VAS_loadout_ip}) exitWith {};
 _slot = if(isNil {_this select 0}) then {lbCurSel VAS_load_list} else {_this select 0};
 if(_slot == -1) exitWith {hint localize "STR_VAS_Prompt_slotSelFail";};
@@ -18,6 +18,8 @@ if(vas_disableLoadSave) then
 {
 	_loadout = profileNamespace getVariable format["vas_gear_new_%1",_slot];
 };
+
+_unitToConfigure = [] call VAS_fnc_getUnitToConfigure;
 
 if(isNil {_loadout}) exitWith {}; //Slot data doesn't exist
 VAS_loadout_ip = true;
@@ -37,17 +39,17 @@ _vitems = _loadout select 13;
 _bitems = _loadout select 14;
 
 //Strip the unit down
-RemoveAllWeapons player;
-{player removeMagazine _x;} foreach (magazines player);
-removeUniform player;
-removeVest player;
-removeBackpack player;
-removeGoggles player;
-removeHeadGear player;
+RemoveAllWeapons _unitToConfigure;
+{_unitToConfigure removeMagazine _x;} foreach (magazines _unitToConfigure);
+removeUniform _unitToConfigure;
+removeVest _unitToConfigure;
+removeBackpack _unitToConfigure;
+removeGoggles _unitToConfigure;
+removeHeadGear _unitToConfigure;
 {
-	player unassignItem _x;
-	player removeItem _x;
-} foreach (assignedItems player);
+	_unitToConfigure unassignItem _x;
+	_unitToConfigure removeItem _x;
+} foreach (assignedItems _unitToConfigure);
 
 //Add the gear
 if(_uniform != "") then {_handle = [_uniform,true,false,false,false] spawn VAS_fnc_handleItem; waitUntil {scriptDone _handle};};
@@ -70,8 +72,8 @@ if(_handgun != "") then {[_handgun,true,false,false,false] spawn VAS_fnc_handleI
 {[_x,true,false,true,false] call VAS_fnc_handleItem;} foreach (_secitems);
 {[_x,true,false,true,false] call VAS_fnc_handleItem;} foreach (_handgunitems);  
 
-if(primaryWeapon player != "") then
+if(primaryWeapon _unitToConfigure != "") then
 {
-	player selectWeapon (primaryWeapon player);
+	_unitToConfigure selectWeapon (primaryWeapon _unitToConfigure);
 };
 VAS_loadout_ip = nil;

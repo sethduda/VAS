@@ -6,7 +6,8 @@
 	Description:
 	A simple handler for updating the gear load displays.
 */
-private["_cfgInfo"];
+private["_cfgInfo","_unitToConfigure"];
+_unitToConfigure = [] call VAS_fnc_getUnitToConfigure;
 {
 	_container = _x select 0;
 	if(_container != "") then
@@ -15,7 +16,7 @@ private["_cfgInfo"];
 		_cfgInfo = [_container] call VAS_fnc_fetchCfgDetails;
 		if(count _cfgInfo > 0) then
 		{
-			if(_container == backpack player) then 
+			if(_container == backpack _unitToConfigure) then 
 			{
 				_maxLoad = getNumber(configFile >> "CfgVehicles" >> _container >> "maximumload");
 				if(_maxLoad == 0) then {_load = 1;};
@@ -41,4 +42,4 @@ private["_cfgInfo"];
 		(VAS_getControl(VAS_Main_Display,(_x select 3))) ctrlShow false;
 		(VAS_getControl(VAS_Main_Display,(_x select 4))) ctrlShow false;
 	};
-} foreach [[uniform player,loadUniform player,2950,2960,2970],[vest player,loadVest player,2951,2961,2971],[backPack player,loadBackpack player,2952,2962,2972]];
+} foreach [[uniform _unitToConfigure,loadUniform _unitToConfigure,2950,2960,2970],[vest _unitToConfigure,loadVest _unitToConfigure,2951,2961,2971],[backPack _unitToConfigure,loadBackpack _unitToConfigure,2952,2962,2972]];

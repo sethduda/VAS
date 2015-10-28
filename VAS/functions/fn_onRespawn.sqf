@@ -12,5 +12,8 @@ if(VAS_slot == -1) exitWith {hint localize "STR_VAS_Prompt_onRespawnFail"; if(!i
 
 if(isNil "VAS_Respawn_Handler") then
 {
-	VAS_Respawn_Handler = player addEventHandler ["Respawn", {[VAS_slot] spawn VAS_fnc_loadGear;}];
+	VAS_Respawn_Handler = player addEventHandler ["Respawn", {
+		[player] call VAS_fnc_setUnitToConfigure;
+		[VAS_slot] spawn VAS_fnc_loadGear;
+	}];
 };

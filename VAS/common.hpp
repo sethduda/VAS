@@ -186,7 +186,8 @@ class VAS_RscActiveText {
 	soundClick[] = {"\A3\ui_f\data\Sound\RscButtonMenu\soundClick", 0.07, 1};
 	soundEscape[] = {"\A3\ui_f\data\Sound\RscButtonMenu\soundEscape", 0.09, 1};
 	action = "";
-	text = "";
+	text = "";	
+	colorDisabled[] = {};
 };
 
 class VAS_RscButton {
@@ -1066,4 +1067,5 @@ class VAS_ActiveTextPicture
     soundPush[] = {"\A3\ui_f\data\sound\RscButton\soundPush",0.09,1};
     soundClick[] = {"\A3\ui_f\data\sound\RscButton\soundClick",0.09,1};
     soundEscape[] = {"\A3\ui_f\data\sound\RscButton\soundEscape",0.09,1};
+	colorDisabled[] = {};
 };

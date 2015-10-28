@@ -4,6 +4,7 @@ class VAS
 	class functions
 	{
 		file = "VAS\functions";
+		class openVAS {_description = "Primary interface to open VAS display";};
 		class onRespawn {description = "Called when a selected loadout is set to be loaded on respawn.";};
 		class deleteGear {description = "Deletes the selected slot from the profileNamespace.";};
 		class loadoutInfo {description = "Pulls up information about the selected slot and displays it.";};
@@ -43,5 +44,7 @@ class VAS
 		class VASP {};
 		class quickAttachment {};
 		class accList {};
+		class getUnitToConfigure {_description = "Get the unit whose gear is being configured via VAS";};
+		class setUnitToConfigure {_description = "Set the unit whose gear is being configured via VAS";};
 	};
 };
