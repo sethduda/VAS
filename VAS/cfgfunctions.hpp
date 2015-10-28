@@ -46,5 +46,10 @@ class VAS
 		class accList {};
 		class getUnitToConfigure {_description = "Get the unit whose gear is being configured via VAS";};
 		class setUnitToConfigure {_description = "Set the unit whose gear is being configured via VAS";};
+		class closestVasContainer {};
+		class unitNearVasContainer {};
+		class getVasContainers {};
+		class registerVasContainer {};
+		class createVasContainer {};
 	};
 };
